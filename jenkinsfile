@@ -16,7 +16,7 @@ pipeline {
                         IF EXIST docker-compose.yml (
                             docker-compose down
                         )
-                        docker-compose --env-file .env up --build -d
+                        docker-compose up --build -d
                     '''
                 }
             }
