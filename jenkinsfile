@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/mehul-srivastava-code/Full_deployement.git'
+            }
+        }
+
+        stage('Deploy with Docker Compose') {
+            steps {
+                script {
+                    // Optional: Clean up previous containers
+                    bat 'docker-compose down || true'
+                    
+                    // Build and start containers using .env in root
+                    bat 'docker-compose --env-file .env up --build -d'
+                }
+            }
+        }
+
+        stage('Verify Containers') {
+            steps {
+                bat 'docker ps'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Deployment complete!'
+        }
+        failure {
+            echo '❌ Deployment failed.'
+        }
+    }
+}
