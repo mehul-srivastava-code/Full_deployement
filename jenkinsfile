@@ -8,14 +8,16 @@ pipeline {
             }
         }
 
-        stage('Deploy with Docker Compose') {
+        stage('Docker Compose Deploy') {
             steps {
-                script {
-                    // Optional: Clean up previous containers
-                    bat 'docker-compose down || true'
-                    
-                    // Build and start containers using .env in root
-                    bat 'docker-compose --env-file .env up --build -d'
+                dir('') {
+                    // Navigate to the correct directory if needed
+                    bat '''
+                        IF EXIST docker-compose.yml (
+                            docker-compose down
+                        )
+                        docker-compose --env-file .env up --build -d
+                    '''
                 }
             }
         }
