@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     environment {
-        MONGODB_URI = credentials('mongo-uri')                    // No quotes
+        MONGODB_URI = credentials('mongo-uri')                    
         JWT_SECRET = credentials('jwt-secret')
         CLOUDINARY_CLOUD_NAME = credentials('cloud-name')
         CLOUDINARY_API_KEY = credentials('cloud-key')
         CLOUDINARY_API_SECRET = credentials('cloud-secret')
-        NODE_ENV = 'development'                                  // You can hardcode this
-        PORT = '5001'                                             // Optional if not used in compose
+        NODE_ENV = 'development'                                 
+        PORT = '5001'                                             
     }
 
     stages {
