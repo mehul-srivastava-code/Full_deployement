@@ -2,13 +2,14 @@ pipeline {
     agent any
 
     environment {
-        MONGODB_URI = credentials('mongo-uri')                    
-        JWT_SECRET = credentials('jwt-secret')
-        CLOUDINARY_CLOUD_NAME = credentials('cloud-name')
-        CLOUDINARY_API_KEY = credentials('cloud-key')
-        CLOUDINARY_API_SECRET = credentials('cloud-secret')
-        NODE_ENV = 'development'                                 
-        PORT = '5001'                                             
+        // Jenkins credentials (you must define these in Jenkins > Credentials)
+        MONGODB_URI             = credentials('mongo-uri')
+        JWT_SECRET              = credentials('jwt-secret')
+        CLOUDINARY_CLOUD_NAME   = credentials('cloud-name')
+        CLOUDINARY_API_KEY      = credentials('cloud-key')
+        CLOUDINARY_API_SECRET   = credentials('cloud-secret')
+        NODE_ENV                = 'production'
+        PORT                    = '5001'
     }
 
     stages {
@@ -18,8 +19,14 @@ pipeline {
             }
         }
 
-        stage('Create .env File') {
+        stage('Create .env File for Frontend & Backend') {
             steps {
+                // Create .env file inside frontend/
+                writeFile file: 'frontend/.env', text: """
+VITE_BACKEND_URL=http://backend:5001
+"""
+
+                // Create .env for backend and Docker Compose
                 writeFile file: '.env', text: """
 MONGODB_URI=${MONGODB_URI}
 JWT_SECRET=${JWT_SECRET}
